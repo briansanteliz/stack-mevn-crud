@@ -1,0 +1,3 @@
+{
+    "presets": ["env"] /* Configurando babel para transpilar el codigo */
+}
