@@ -8,13 +8,13 @@ module.exports = {
   },
   module: {
     rules: [
-        //Transpila el codigo con babel
+        //LOADER paa Transpila el codigo con babel
       {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: "babel-loader",
       },
-      //entiende los archivos vue
+      // LOADER para entiende los archivos vue
       {
           test:/\.vue$/,
           loader:'vue-loader'

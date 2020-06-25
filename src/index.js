@@ -25,10 +25,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/tareas', tareasRuta)
 
 //iniciando el servidor y la bd
-const init = async () => {
+const start = async () => {
   await app.listen(app.get("port"));
   console.log(`Servidor en el puerto ${app.get("port")}`);
   await mongoose.connect('mongodb://localhost/stack-mevn')
   console.log('db connected')
 };
-init();
+start();

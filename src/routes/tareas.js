@@ -7,7 +7,7 @@ const Tarea = require("../model/Tareas");
 
 //api para manejar las tareas
 router.get("/", async (req, res) => {
-  const resp = await Tarea.find(); //consulta la bd
+  const resp = await Tarea.find(); //consulta la bd todas las tareas
   res.json(resp);
 });
 
