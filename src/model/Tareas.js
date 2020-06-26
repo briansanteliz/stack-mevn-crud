@@ -3,6 +3,8 @@ const { Schema } = mongoose;
 //definiendo el Schema de las tareas
 const tareaSchema = new Schema({
   titulo: String,
+  email: String,
+  telefono: Number,
   descripcion: String,
   fecha: { type: Date, default: Date.now },
 });

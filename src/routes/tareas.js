@@ -18,11 +18,13 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { titulo, descripcion } = req.body;
+  const { titulo, email, telefono, descripcion } = req.body;
   //crea una tarea con los datos del req.body
   const tareaGuardada = new Tarea({
     titulo,
-    descripcion,
+    email,
+    telefono,
+    descripcion
   });
   await tareaGuardada.save(); //guarda la tarea en mongodb
   res.status(200).json({ status: "Guardado", data: tareaGuardada });
@@ -40,8 +42,8 @@ router.delete("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { titulo, descripcion } = req.body;
-  await Tarea.findByIdAndUpdate({ _id: id }, { titulo, descripcion });
+  const { titulo, email, telefono, descripcion } = req.body;
+  await Tarea.findByIdAndUpdate({ _id: id }, { titulo, email, telefono, descripcion });
   res.status(200).json({ status: "dato actualizado" });
 });
 module.exports = router;

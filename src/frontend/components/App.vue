@@ -19,7 +19,7 @@
     </nav>
     <div class="container">
         <div class="row">
-            <div class="col-md-5 p-4">
+            <div class="col-md-5 mt-4">
                 <div class="card">
                     <div class="card-header">
                        <template v-if="estado">
@@ -32,10 +32,16 @@
                     <div class="card-body">
                         <form @submit.prevent ="agregarTarea">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Escribe el titulo" v-model="tarea.titulo">
+                                <input type="text" class="form-control" placeholder="Escribe el titulo" v-model="tarea.titulo" required>
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control"  placeholder="Escribe la descripcion" v-model="tarea.descripcion"></textarea>
+                                <input type="email" placeholder="Escribe tu email" class="form-control" required v-model="tarea.email">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" placeholder="Escribe tu telefono" class="form-control" min="0" required v-model="tarea.telefono">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control"  placeholder="Escribe la descripcion" v-model="tarea.descripcion" required></textarea>
                             </div>
                             <div class="form-group">
                                <template v-if="estado">
@@ -49,21 +55,31 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-7 p-4">
+            <div class="col-md-7 mt-4">
                 <table class="table table-bordered">
                     <thead>
-                        <tr>
-                            <th>Titulo</th>
-                            <th>Descripcion</th>
-                            <th>Fecha</th>
-                            <th>Acciones</th>
-                        </tr>
+                        <template v-if="tareasObtenidas.length > 0">
+                            <tr>
+                                <th>Titulo</th>
+                                <th>Email</th>
+                                <th>Telefono</th>
+                                <th>Descripcion</th>
+                                <!-- <th>Fecha</th> -->
+                                <th>Acciones</th>
+                            </tr>
+                        </template>
+                        <template v-else>
+                            <h3 class="text-center text-uppercase">No hay Registros</h3>
+                            <p class="text-center">Agrega uno para comenzar</p>
+                        </template>
                     </thead>
                     <tbody>
                         <tr v-for="tarea of tareasObtenidas">
                             <td>{{tarea.titulo}}</td>
+                            <td>{{tarea.email}}</td>
+                            <td>{{tarea.telefono}}</td>
                             <td>{{tarea.descripcion}}</td>
-                            <td>{{tarea.fecha}}</td>
+                            <!-- <td>{{tarea.fecha}}</td> -->
                             <td class="d-flex">
                                     <button @click="eliminarTarea(tarea._id)" class=" btn btn-danger mr-3"><i class="fas fa-trash"></i></button>
                             
@@ -83,9 +99,11 @@
 <script>
       //clase para agregar una nueva tarea
       class Tarea{
-          constructor(titulo, descripcion){
+          constructor(titulo, email, telefono, descripcion){
               this.titulo = titulo;
-              this.descripcion = descripcion
+              this.email= email;
+              this.telefono = telefono;
+              this.descripcion = descripcion;
           }
       }
             
@@ -128,7 +146,8 @@
                             .then(data=>this.obtenerTareas()) //actualza el front
                         this.estado = false; //cambia el estado a falso
                 }else{
-                    if(this.tarea.titulo === undefined || this.tarea.descripcion === undefined){
+                    //Valida los campos
+                    if(this.tarea.titulo === undefined || this.tarea.email === undefined || this.tarea.telefono === undefined  || this.tarea.descripcion === undefined  ){
                      alert('todos los campos son obligatorios')
                      return
                  }
@@ -176,7 +195,7 @@
                 .then(res=>res.json())
                 .then(data=>{
                     //crea un nuevo clase  y lo asigna al objeto tarea, los inputs se actualizan con el valor del dato obtenido
-                    this.tarea = new Tarea(data.titulo, data.descripcion)
+                    this.tarea = new Tarea(data.titulo, data.email, data.telefono, data.descripcion)
                     this.estado = true; //actualiza el estado a true
                     this.tareaEditarId = data._id //asigna el _id
                 })
