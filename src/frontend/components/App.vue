@@ -22,7 +22,12 @@
             <div class="col-md-5 p-4">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="text-center text-uppercase">Agrega una Tarea</h5>
+                       <template v-if="estado">
+                        <h5 class="text-center text-uppercase">actualiza una Tarea</h5>
+                       </template>
+                       <template v-else>
+                        <h5 class="text-center text-uppercase">agrega una Tarea</h5>
+                       </template>
                     </div>
                     <div class="card-body">
                         <form @submit.prevent ="agregarTarea">
