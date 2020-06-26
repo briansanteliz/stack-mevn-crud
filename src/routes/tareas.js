@@ -11,6 +11,12 @@ router.get("/", async (req, res) => {
   res.json(resp);
 });
 
+router.get("/:id", async (req, res) => {
+  const {id} = req.params;
+  const resp = await Tarea.findById({_id:id})
+  res.status(200).json(resp);
+});
+
 router.post("/", async (req, res) => {
   const { titulo, descripcion } = req.body;
   //crea una tarea con los datos del req.body

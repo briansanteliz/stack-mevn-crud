@@ -33,11 +33,42 @@
                                 <textarea class="form-control"  placeholder="Escribe la descripcion" v-model="tarea.descripcion"></textarea>
                             </div>
                             <div class="form-group">
+                               <template v-if="estado">
+                                <button type="submit" class="btn btn-warning btn-block text-uppercase text-light" style="border: none;" >Actualizar</button>
+                               </template>
+                               <template v-else>
                                 <button type="submit" class="btn btn-info btn-block text-uppercase" style="border: none;" >enviar</button>
+                               </template>
                             </div>
                         </form>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-7 p-4">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Titulo</th>
+                            <th>Descripcion</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="tarea of tareasObtenidas">
+                            <td>{{tarea.titulo}}</td>
+                            <td>{{tarea.descripcion}}</td>
+                            <td>{{tarea.fecha}}</td>
+                            <td class="d-flex">
+                                    <button @click="eliminarTarea(tarea._id)" class=" btn btn-danger mr-3"><i class="fas fa-trash"></i></button>
+                            
+                            
+                                <button @click="actualizarTarea(tarea._id)" class="btn btn-info"><i class="fas fa-pencil-alt"></i></i></button>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -45,25 +76,105 @@
 </template>
 
 <script>
+      //clase para agregar una nueva tarea
+      class Tarea{
+          constructor(titulo, descripcion){
+              this.titulo = titulo;
+              this.descripcion = descripcion
+          }
+      }
+            
+        
     export default{
+      
         //datos que usara el CRUD
         data(){
              return {
                 //retorna un objeto tarea con los valores de los inputs
                 //obtenidos del v-model
-                tarea:{
-                    titulo:'',
-                    descripcion:''
-                }
+                tarea: new Tarea(),
+                //arreglo de tareas obtenidos de la api
+                tareasObtenidas: [],
+                estado:false, //estado para saber si se esta editando
+                tareaEditarId: '' //se llenara con el id de la tarea a editar
              }
         },
-        methods:{
-            //metodo para agregar una tarea
+        //apenas la app se ejecuta se ejecuta este metodo
+        created(){
+            this.obtenerTareas()
+        },
+        methods:{            
+            //metodo para agregar una tarea 
             agregarTarea(){
-                console.log(this.tarea)
-                //limpia los inputs del form añ ejecutar el form
-                this.tarea.titulo="";
-                this.tarea.descripcion="";
+                //comprueba si la tarea agregar es para actualizar o es nueva
+                if(this.estado){
+                    //actualiza una tarea
+                    fetch('/api/tareas/' + this.tareaEditarId,{
+                        method: 'PUT',
+                        body: JSON.stringify(this.tarea),
+                        headers:{
+                            'Accept':'application/json', 
+                        'Content-type':'application/json'
+                        }
+                       
+                    })
+
+                    .then(res=>res.json())
+                            .then(data=>this.obtenerTareas()) //actualza el front
+                        this.estado = false; //cambia el estado a falso
+                }else{
+                    if(this.tarea.titulo === undefined || this.tarea.descripcion === undefined){
+                     alert('todos los campos son obligatorios')
+                     return
+                 }
+                //envia una peticion a la api del server con los datos de la tarea
+                fetch('/api/tareas',{
+                    method:'POST', //metodo post
+                    body:JSON.stringify(this.tarea), //el cuerpo sera el objeto de tarea pero debe ser un string
+                    headers:{
+                        'Accept':'application/json', //cabeceras de la peticion
+                        'Content-type':'application/json'
+                    }
+                })
+                    .then(res=>res.json())  //res.json devuelve una promesa
+                        .then(data=>{
+                            //ejecuta el metodo de obtener tareas 
+                            this.obtenerTareas()
+                        })
+                }
+                //limpia los inputs al ejecutar el form
+                this.tarea = new Tarea()
+            },
+            obtenerTareas(){
+                //realiza peticion get a la api
+                fetch('/api/tareas')
+                    .then(res=>res.json())
+                        .then(data=> {
+                            this.tareasObtenidas = data;  //asignados los datos al arreglo
+                        })
+            },
+            eliminarTarea(id){
+                //realiza peticion a la api con el metodo delete junto al id
+                fetch('/api/tareas/' + id, {
+                    method:'DELETE',
+                    headers:{
+                        'Accept':'application/json', 
+                        'Content-type':'application/json'
+                    }
+                })
+                .then(res=>res.json())
+                        .then(data=>this.obtenerTareas()) //obtiene las tareas y actualiza el front end
+            },
+            actualizarTarea(id){
+                //obtiene las tareas por id
+                fetch('/api/tareas/' + id)
+                .then(res=>res.json())
+                .then(data=>{
+                    //crea un nuevo clase  y lo asigna al objeto tarea, los inputs se actualizan con el valor del dato obtenido
+                    this.tarea = new Tarea(data.titulo, data.descripcion)
+                    this.estado = true; //actualiza el estado a true
+                    this.tareaEditarId = data._id //asigna el _id
+                })
             }
         }
     }

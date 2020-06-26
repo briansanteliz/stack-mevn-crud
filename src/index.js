@@ -22,7 +22,7 @@ app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Rutas del servidor
-app.use('/tareas', tareasRuta)
+app.use('/api/tareas', tareasRuta)
 
 //iniciando el servidor y la bd
 const start = async () => {
