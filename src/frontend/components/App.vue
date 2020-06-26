@@ -57,9 +57,9 @@
             </div>
             <div class="col-md-7 mt-4">
                 <table class="table table-bordered">
-                    <thead>
+                    <thead class="bg-secondary">
                         <template v-if="tareasObtenidas.length > 0">
-                            <tr>
+                            <tr class="text-white" style="background:#008c7f;">
                                 <th>Titulo</th>
                                 <th>Email</th>
                                 <th>Telefono</th>
@@ -69,12 +69,12 @@
                             </tr>
                         </template>
                         <template v-else>
-                            <h3 class="text-center text-uppercase">No hay Registros</h3>
-                            <p class="text-center">Agrega uno para comenzar</p>
+                                <h3 class="text-center text-uppercase text-white ">No hay Registros</h3>
+                                <p class="text-center text-white ">Agrega uno para comenzar</p>
                         </template>
                     </thead>
                     <tbody>
-                        <tr v-for="tarea of tareasObtenidas">
+                        <tr v-for="tarea of tareasObtenidas" class="text-white" style="background:rgb(31, 95, 103);">
                             <td>{{tarea.titulo}}</td>
                             <td>{{tarea.email}}</td>
                             <td>{{tarea.telefono}}</td>
