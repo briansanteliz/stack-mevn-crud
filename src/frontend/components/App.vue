@@ -1,22 +1,20 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-info" style="background: #6f42c1 !important;">
-      <div class="container">
-        <a class="navbar-brand" href="/">STACK MEVN CRUD</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand">STACK MEVN CRUD</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup"></div>
-      </div>
-    </nav>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav ml-auto">
+           <router-link class="nav-item active nav-link text-uppercase"  to="/404" ><a>Routing</a></router-link>
+          </div>
+        </div>
+        </div>
+      </nav>
+   
     <div class="container">
         <div class="row">
             <div class="col-md-5 mt-4">
@@ -84,7 +82,7 @@
                                     <button @click="eliminarTarea(tarea._id)" class=" btn btn-danger mr-3"><i class="fas fa-trash"></i></button>
                             
                             
-                                <button @click="actualizarTarea(tarea._id)" class="btn btn-info"><i class="fas fa-pencil-alt"></i></i></button>
+                                <button @click="actualizarTarea(tarea._id)" class="btn btn-info"><i class="fas fa-pencil-alt"></i></button>
                             </td>
                             
                         </tr>
@@ -95,6 +93,7 @@
     </div>
   </div>
 </template>
+ 
 
 <script>
       //clase para agregar una nueva tarea
